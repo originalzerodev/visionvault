@@ -1,0 +1,236 @@
+/* visionvault-ui/src/index.css */
+/* Dark-themed 3-panel React layout CSS */
+
+:root {
+  --bg-color: #0d0d12;
+  --accent-color: #3b82f6;
+  --border-color: #2a2a35;
+  --text-color: #ffffff;
+  --hover-bg: #1a1a24;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: Arial, sans-serif;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr; /* Three panels: left sidebar, main content, right sidebar */
+  grid-template-rows: 1fr;
+  height: 100vh;
+  gap: 0;
+}
+
+.panel {
+  background-color: var(--bg-color);
+  border-right: 1px solid var(--border-color);
+  padding: 1rem;
+  overflow-y: auto; /* Enable vertical scrolling */
+  transition: background-color 0.3s ease;
+}
+
+.panel:last-child {
+  border-right: none;
+}
+
+.panel:hover {
+  background-color: var(--hover-bg);
+}
+
+.left-panel {
+  /* Additional styles for left panel if needed */
+}
+
+.main-panel {
+  /* Main content area */
+}
+
+.right-panel {
+  /* Additional styles for right panel if needed */
+}
+
+/* Sticky search bar in VaultHistory */
+.search-bar {
+  position: sticky;
+  top: 0;
+  background-color: var(--bg-color);
+  padding: 1rem;
+  z-index: 1;
+}
+
+.search-bar input {
+  background-color: transparent;
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.search-bar input:focus {
+  border-color: var(--accent-color);
+  outline: none;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .app-container {
+    grid-template-columns: 1fr; /* Stack panels vertically on small screens */
+    grid-template-rows: auto 1fr auto;
+  }
+
+  .panel {
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .panel:last-child {
+    border-bottom: none;
+  }
+}
+
+/* Accent elements */
+.accent-text {
+  color: var(--accent-color);
+}
+
+.accent-border {
+  border: 1px solid var(--accent-color);
+}
+
+.button {
+  background-color: var(--accent-color);
+  color: var(--text-color);
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #2563eb; /* Darker blue on hover */
+}
+
+/* Upload zone styling */
+.upload-zone {
+  background-color: var(--bg-color);
+  border: 2px dashed var(--border-color);
+  border-radius: 8px;
+  padding: 2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  text-align: center;
+}
+
+.upload-zone:hover {
+  background-color: var(--hover-bg);
+  border-color: var(--accent-color);
+}
+
+.upload-zone p {
+  margin: 0;
+  color: var(--text-color);
+}
+
+/* Crop container */
+.crop-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Customize ReactCrop styles to match theme */
+.ReactCrop__crop-selection {
+  border: 2px solid var(--accent-color) !important;
+}
+
+.ReactCrop__rule-of-thirds-hz,
+.ReactCrop__rule-of-thirds-vt {
+  border-color: var(--accent-color) !important;
+}
+
+.ReactCrop__drag-handle {
+  background-color: var(--accent-color) !important;
+  border: 1px solid var(--bg-color) !important;
+}
+
+.workspace-tab-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.tab-button {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0.85rem 1.3rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+}
+
+.tab-button:hover {
+  background: rgba(59, 130, 246, 0.12);
+  color: #fff;
+  border-color: rgba(59, 130, 246, 0.45);
+}
+
+.tab-button.active {
+  background: rgba(59, 130, 246, 0.25);
+  color: #fff;
+  border-color: rgba(59, 130, 246, 0.75);
+  box-shadow: 0 12px 28px rgba(59, 130, 246, 0.12);
+}
+
+.scanner-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 960px) {
+  .scanner-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.recall-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  margin-top: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #d1d5db;
+  padding: 2rem;
+}
+
+.placeholder-box {
+  margin-top: 1rem;
+}
