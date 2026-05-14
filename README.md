@@ -27,7 +27,7 @@ This project evolved from a rapid Python/Streamlit prototype into a decoupled, p
 
 **1. Clone the repository**
 \`\`\`bash
-git clone https://github.com/YOUR_USERNAME/visionvault.git
+git clone https://github.com/originalzerodev/visionvault.git
 cd visionvault
 \`\`\`
 
