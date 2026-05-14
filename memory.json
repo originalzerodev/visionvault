@@ -1,0 +1,26 @@
+[
+    {
+        "timestamp": "2026-05-12 00:01:10",
+        "label": "Google Cloud Sticker",
+        "description": "A vibrant orange rectangular promotional sticker featuring a cartoon mascot holding a laptop, promoting Google AI Pro for students.",
+        "secret_forensics": "The sticker is rectangular, orange-colored cardstock with a matte finish. It features a cartoon mascot wearing a baseball cap and sneakers, holding a laptop. Branding at the bottom includes the 'Google Cloud' logo and 'MLH' text in black ink. The edges appear clean with no visible tears or creases.",
+        "secret_location": "The sticker is resting flat on a light-colored wooden desk surface, situated between a clear plastic water bottle on the left and the corner of a black Dell laptop on the right. Black power supply cables snake behind it.",
+        "image_path": "assets/vault\\WhatsApp Image 2026-05-09 at 12.00.35.jpeg"
+    },
+    {
+        "timestamp": "2026-05-12 00:01:48",
+        "label": "Black Computer Mouse",
+        "description": "This is a standard wired black computer mouse used for navigating on a desktop computer.",
+        "secret_forensics": "The mouse features a glossy black finish with a visible Logitech logo printed in silver on the palm rest. There is a faint accumulation of dust near the scroll wheel and button seams. The cable is thin, black, and appears slightly coiled.",
+        "secret_location": "The mouse is positioned in the center of a light-colored wooden desk, situated to the right of a laptop keyboard and to the left of a black vertical computer tower, with a thin black cord extending upward.",
+        "image_path": "assets/vault\\WhatsApp Image 2026-05-09 at 11.20.39.jpeg"
+    },
+    {
+        "timestamp": "2026-05-12 00:00:40",
+        "label": "Acer Computer Mouse",
+        "description": "A standard wired black computer mouse used for navigating on a desktop computer.",
+        "secret_forensics": "The mouse is black with a matte finish and features the white 'acer' logo printed on the rear palm rest. It is a symmetrical wired model with a scroll wheel positioned between the two main click buttons.",
+        "secret_location": "It is resting on a light-colored wooden desk surface, situated to the right of a laptop keyboard and to the left of a large black computer tower, with the cable extending backward toward a monitor stand.",
+        "image_path": "assets/vault\\6f16c618b6c8c22acb0cd200e84cc2b15ec2f4c9f74332357d40921f.jpg"
+    }
+]
