@@ -92,10 +92,14 @@ async def run_agent_1(payload: ScanPayload, history_json: str):
         return {"status": "error", "message": "No crop images provided"}
 
     prompt = f"""CRITICAL VERIFICATION RULE: Analyze ONLY the CROP images. 
-You are a forensic micro-inspector. Scan every pixel and identify the primary object.
-CRITICAL OCR RULE: You MUST actively read and extract any visible text, logos, or brand names (e.g., 'Logitech', 'Google', 'MLH', 'Dell'). 
+You are a forensic micro-inspector. You MUST analyze BOTH the Front View Crop and Back View Crop BEFORE making an identification. Crucial identifying details like logos or text may only appear on one side.
+CRITICAL OCR RULE: You MUST actively read and extract any visible text, logos, or brand names from the crops. These are often the most important clues for identification. Do not ignore them, even if they are small or partially obscured.
 
-If comparing to historical data, be EXTREMELY strict. A black mouse with 'Logitech' is fundamentally a DIFFERENT object than a black mouse with 'Ant Esports', even if the shape is identical. Do not merge them. Match them ONLY if the brand, text, and physical hardware perfectly align.
+if if the logo or brands name aren't visibile, you MUST NOT guess or infer them. Instead, focus on describing the physical characteristics and any visible textures, colors, or marks and check for matches from internet knowledge. Do not attempt to name the object if you cannot see a clear identifier. Instead, provide a detailed description of its physical features and any visible markings.
+
+Be extremely strict with the ocr. don't attempt to guess or infer text that isn't clearly visible. If you can't read it with high confidence, it's safer to say "unreadable" than to risk a false identification. The same goes for logos and brand names - if they aren't clearly visible, do not attempt to name them.
+
+If comparing to historical data, be EXTREMELY strict. Even if the shape is identical, if the brands are different, they are fundamentally different objects. Do not merge them. Match them ONLY if the brand, text, and physical hardware perfectly align.
 
 If the crops depict ONLY empty space or a bare surface without ANY distinct object, you MUST abort and return the status as "error".
 
