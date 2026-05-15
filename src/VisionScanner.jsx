@@ -75,7 +75,7 @@ const getCroppedImg = (image, crop) => {
       crop.height
     );
 
-    return canvas.toDataURL('image/webp', 0.5);
+    return canvas.toDataURL('image/webp', 0.9);
   };
 
 const compressFullImage = (image, quality = 0.8) => {
