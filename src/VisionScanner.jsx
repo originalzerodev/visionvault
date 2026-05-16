@@ -52,7 +52,7 @@ function VisionScanner({ onScanResult, scanHistory, setScanHistory, viewMode, se
     }
   };
 
-const getCroppedImg = (image, crop) => {
+  const getCroppedImg = (image, crop) => {
     // Safety check: if no crop was drawn, abort the crop
     if (!image || !crop || !crop.width || !crop.height) return null;
 
@@ -100,6 +100,53 @@ const compressFullImage = (image, quality = 0.8) => {
     return canvas.toDataURL('image/webp', quality);
   };
 
+  const getMaskedImage = (image, crop, quality = 0.8) => {
+    if (!image) return null;
+    // If no crop was made, just return the standard full image
+    if (!crop || !crop.width || !crop.height) return compressFullImage(image, quality);
+
+    const canvas = document.createElement('canvas');
+    const MAX_WIDTH = 1280;
+    let width = image.naturalWidth;
+    let height = image.naturalHeight;
+
+    if (width > MAX_WIDTH) {
+      height = Math.round((height * MAX_WIDTH) / width);
+      width = MAX_WIDTH;
+    }
+
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+
+    // 1. Draw the full image
+    ctx.drawImage(image, 0, 0, width, height);
+
+    // 2. Calculate the crop coordinates relative to the natural image size
+    // (ReactCrop operates on the DOM element's displayed size)
+    const domScaleX = image.naturalWidth / image.width;
+    const domScaleY = image.naturalHeight / image.height;
+    
+    const naturalCropX = crop.x * domScaleX;
+    const naturalCropY = crop.y * domScaleY;
+    const naturalCropWidth = crop.width * domScaleX;
+    const naturalCropHeight = crop.height * domScaleY;
+
+    // 3. Scale those coordinates down to our new compressed 1280px canvas size
+    const canvasScale = width / image.naturalWidth;
+
+    // 4. Draw a solid black box over the cropped area
+    ctx.fillStyle = '#000000'; 
+    ctx.fillRect(
+        naturalCropX * canvasScale,
+        naturalCropY * canvasScale,
+        naturalCropWidth * canvasScale,
+        naturalCropHeight * canvasScale
+    );
+
+    return canvas.toDataURL('image/webp', quality);
+  };
+
   const handleScan = async () => {
     setIsScanning(true);
     try {
@@ -107,7 +154,11 @@ const compressFullImage = (image, quality = 0.8) => {
       let frontOriginalBase64 = images.front ? compressFullImage(imgRefFront.current, 0.8) : null;
       let backOriginalBase64 = images.back ? compressFullImage(imgRefBack.current, 0.8) : null;
 
-      // PASS 2: Compress the tiny crops (50% Quality)
+      // PASS 2: Create the Masked Backgrounds for Agent 2
+      let frontMaskedBase64 = images.front ? getMaskedImage(imgRefFront.current, completedCrops.front, 0.8) : null;
+      let backMaskedBase64 = images.back ? getMaskedImage(imgRefBack.current, completedCrops.back, 0.8) : null;
+
+      // PASS 3: Compress the tiny crops (50% Quality)
       let frontCropBase64 = null;
       let backCropBase64 = null;
 
@@ -127,10 +178,12 @@ const compressFullImage = (image, quality = 0.8) => {
       const payload = {
         front: {
           original: frontOriginalBase64, // Using the new 80% compressed version
+          original_masked: frontMaskedBase64, // NEW: Goes to Agent 2
           crop: frontCropBase64
         },
         back: {
           original: backOriginalBase64, // Using the new 80% compressed version
+          original_masked: backMaskedBase64, // NEW: Goes to Agent 2
           crop: backCropBase64
         },
         history: safeHistory,
