@@ -42,6 +42,12 @@ class SearchPayload(BaseModel):
     query: str
     history: list
 
+# Optional, but good practice if you ever strict-type the Dicts
+class ScanPayload(BaseModel):
+    front: Optional[Dict[str, Any]] = None
+    back: Optional[Dict[str, Any]] = None
+    history: list = []
+
 def base64_to_bytes(base64_str: str) -> bytes:
     """Convert a base64 string (with or without data URI prefix) to bytes."""
     if base64_str.startswith('data:image'):
@@ -137,21 +143,26 @@ Ensure the response is valid JSON only, no markdown."""
 # --- AGENT 2: THE SPATIAL LOCATOR (ORIGINALS ONLY) ---
 async def run_agent_2(payload: ScanPayload):
     content = []
-    if payload.front and payload.front.get('original'):
-        content.append("--- THIS NEXT IMAGE IS THE: Original Room Background ---")
-        content.append({'mime_type': 'image/webp', 'data': base64_to_bytes(payload.front['original'])})
-    # We only really need one background to find the location, saving tokens
-    elif payload.back and payload.back.get('original'):
-        content.append("--- THIS NEXT IMAGE IS THE: Original Room Background ---")
-        content.append({'mime_type': 'image/webp', 'data': base64_to_bytes(payload.back['original'])})
+    # Feed Agent 2 the MASKED image
+    if payload.front and payload.front.get('original_masked'):
+        content.append("--- THIS NEXT IMAGE IS THE: Room Background with the Target Object Masked Out ---")
+        content.append({'mime_type': 'image/webp', 'data': base64_to_bytes(payload.front['original_masked'])})
+    elif payload.back and payload.back.get('original_masked'):
+        content.append("--- THIS NEXT IMAGE IS THE: Room Background with the Target Object Masked Out ---")
+        content.append({'mime_type': 'image/webp', 'data': base64_to_bytes(payload.back['original_masked'])})
 
     if not content:
          return {"spatial_context": "No background image provided."}
 
-    prompt = """You are a spatial analysis engine looking at a room environment. 
-Find the most prominent object in the center of the image. Treat this central object as a strictly defined variable named [TARGET_OBJECT].
-STRICT RULE: Do not attempt to guess or name what [TARGET_OBJECT] is. Your ONLY job is to describe its location relative to other items in the environment.
-Example valid output: {"spatial_context": "[TARGET_OBJECT] is resting on a white piece of paper on a wooden desk, positioned near a laptop."}
+    # NEW PROMPT: Targeting the mask specifically
+    prompt = """You are a spatial analysis engine looking at a room environment.
+You will notice a stark, blacked-out rectangular mask in the center/foreground of the image.
+Treat this completely masked/blacked-out area as a strictly defined variable named [TARGET_OBJECT].
+
+STRICT RULE: Do not attempt to guess or name what [TARGET_OBJECT] is, because you cannot see it.
+Your ONLY job is to describe the location of this masked block relative to other visible items in the environment.
+
+Example valid output: {"spatial_context": "[TARGET_OBJECT] is resting on a wooden desk, positioned near a white coffee mug."}
 
 Return ONLY a valid JSON object with this EXACT single field:
 - spatial_context: String
